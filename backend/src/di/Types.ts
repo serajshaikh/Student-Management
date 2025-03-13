@@ -3,6 +3,7 @@ const TYPES = {
   StudentRepository: Symbol.for('StudentRepository'),
   StudentController: Symbol.for('StudentController'),
   ResponseHandler: Symbol.for('ResponseHandler'),
+  Logger: Symbol.for('Logger'),
 };
 
 export { TYPES };

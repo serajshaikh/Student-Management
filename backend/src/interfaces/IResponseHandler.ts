@@ -4,7 +4,7 @@ import { IResponseModelFailureParams, IResponseModelSuccessParams } from "./IHtt
 
 export interface IResponseHandler {
     version?: string;
-    validate<T>(arg: { schema: z.ZodType, suppressError?: boolean, payload: T }, traceId?:string): T;
-    success<T>(arg: IResponseModelSuccessParams<T>, traceId?:string): void;
-    failure(arg: IResponseModelFailureParams, traceId?:string): void;
+    validate<T>(arg: { schema: z.ZodType, suppressError?: boolean, payload: T }, trace_id?:string): T;
+    success<T>(arg: IResponseModelSuccessParams<T>, trace_id?:string): void;
+    failure(arg: IResponseModelFailureParams, trace_id?:string): void;
 }

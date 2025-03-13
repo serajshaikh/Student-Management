@@ -7,6 +7,9 @@ import { StudentController } from '../controllers/StudentController';
 import { ResponseHandler } from '../utils/error/ResponseHandler';
 import { IStudentService } from '../interfaces/IStudentService';
 import { IResponseHandler } from '../interfaces/IResponseHandler';
+import { ILogger } from '../interfaces/ILogger';
+import { Logger } from '../utils/logger/Logger';
+
 
 const container = new Container();
 
@@ -15,5 +18,8 @@ container.bind<StudentController>(TYPES.StudentController).to(StudentController)
 container.bind<IStudentService>(TYPES.StudentService).to(StudentService).inSingletonScope();
 container.bind<StudentRepository>(TYPES.StudentRepository).to(StudentRepository).inSingletonScope();
 container.bind<IResponseHandler>(TYPES.ResponseHandler).to(ResponseHandler).inSingletonScope();
+
+// Bind Logger
+container.bind<ILogger>(TYPES.Logger).to(Logger).inSingletonScope();
 
 export { container };

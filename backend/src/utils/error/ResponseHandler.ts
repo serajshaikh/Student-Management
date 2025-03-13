@@ -9,24 +9,26 @@ import { IServiceExceptionOptions } from "./ServiceException";
 @injectable()
 export class ResponseHandler implements IResponseHandler {
 
-    validate<T>(arg: { schema: z.ZodType, suppress_error?: boolean, payload: T }, traceId?:string): T {
+    validate<T>(arg: { schema: z.ZodType, suppress_error?: boolean, payload: T }, trace_id?: string): T {
         try {
             return arg.schema.parse(arg.payload);
         } catch (error) {
-            console.log("Payload Validation Error-->", traceId);
+            console.log("Payload Validation Error-->", trace_id);
             throw error;
         }
     }
 
-    success<T>(arg: IResponseModelSuccessParams<T>, traceId?:string): void {
-        console.log("Success---->", arg?.responseData, traceId);
+    success<T>(arg: IResponseModelSuccessParams<T>, trace_id?: string): void {
+        console.log("Success---->", arg?.responseData, trace_id);
         arg.response.status(arg?.statusCode ?? 200).json(arg?.responseData ?? {});
     }
 
-    failure(arg: IResponseModelFailureParams, traceId?:string): void {
-        console.log("Failure---->", JSON.stringify(arg?.error), traceId);
-        const errorResponse = _.omit(arg?.error??{}, ["statusCode"]);
-        const status = (arg?.error as IServiceExceptionOptions)?.statusCode ?? arg?.statusCode ?? 500;
-        arg.response.status(status).json({error:errorResponse ?? {}});
+    failure(arg: IResponseModelFailureParams, trace_id?: string): void {
+        console.log("Failure---->", JSON.stringify(arg.error), trace_id ?? "No Trace ID");
+
+        const { error, statusCode, response } = arg;
+        const sanitizedError = _.omit(error ?? {}, ["statusCode"]);
+        const status = (error as IServiceExceptionOptions)?.statusCode ?? statusCode ?? 500;
+        response.status(status).json({ error: _.isEmpty(sanitizedError) ? { message: "Internal Server Error" } : sanitizedError });
     }
 }

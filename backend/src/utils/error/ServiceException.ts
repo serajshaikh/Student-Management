@@ -1,7 +1,7 @@
 
 export interface IServiceExceptionOptions {
     message: string;
-    traceId: string|null
+    trace_id: string|null
     payload?: unknown;
     additionalInfo?: Record<string, unknown> | null;
     statusCode:number
@@ -9,15 +9,15 @@ export interface IServiceExceptionOptions {
 
 export class ServiceException extends Error {
     message: string;
-    traceId: string | null;
+    trace_id: string | null;
     additionalInfo?: Record<string, unknown> | null;
     payload: unknown;
     statusCode: number;
 
-    constructor({  message, additionalInfo, payload, traceId, statusCode }: IServiceExceptionOptions) {
+    constructor({  message, additionalInfo, payload, trace_id, statusCode }: IServiceExceptionOptions) {
         super(message ?? "unknown error exception");
         this.message=message;
-        this.traceId = traceId;
+        this.trace_id = trace_id;
         this.statusCode = statusCode ?? 500;
         this.name = "ServiceException";
         this.payload = payload;
