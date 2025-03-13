@@ -1,25 +1,26 @@
 import { inject, injectable } from 'inversify';
-import { Student } from '../models/Student';
+import { IStudent } from '../models/IStudent';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { TYPES } from '../di/Types';
+import { IStudentService } from '../interfaces/IStudentService';
 
 @injectable()
-export class StudentService {
+export class StudentService implements IStudentService {
   constructor(@inject(TYPES.StudentRepository) private studentRepository: StudentRepository) { }
 
-  async createStudent(student: Student): Promise<Student> {
+  async createStudent(student: IStudent): Promise<IStudent> {
     return this.studentRepository.create(student);
   }
 
-  async getAllStudents(): Promise<Student[]> {
+  async getAllStudents(): Promise<IStudent[]> {
     return this.studentRepository.findAll();
   }
 
-  async getStudentById(id: string): Promise<Student | null> {
+  async getStudentById(id: string): Promise<IStudent | null> {
     return this.studentRepository.findById(id);
   }
 
-  async updateStudent(id: string, student: Student): Promise<Student | null> {
+  async updateStudent(id: string, student: IStudent): Promise<IStudent | null> {
     return this.studentRepository.update(id, student);
   }
 
