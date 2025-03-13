@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "esModuleInterop": true,
+      "importsNotUsedAsValues": "remove",
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "Node",
+      "module": "CommonJS",
+      "strict": true,
+      "skipLibCheck": true,
+      "outDir": "dist",
+      "sourceMap": true
+    },
+    "exclude": ["node_modules", "dist"],
+    "include": ["src/**/*.ts"]
+  }
