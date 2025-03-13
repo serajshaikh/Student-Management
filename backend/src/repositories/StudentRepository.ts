@@ -7,13 +7,13 @@ import { TYPES } from '../di/Types';
 
 @injectable()
 export class StudentRepository implements IStudentRepository {
-  constructor(@inject(TYPES.Logger) private logger: ILogger) {}
+  constructor(@inject(TYPES.Logger) private logger: ILogger) { }
 
   async create(student: IStudent, trace_id?: string): Promise<IStudent> {
     try {
       const { name, email, date_of_birth } = student;
       this.logger.info(student, { description: "Creating new student", trace_id, ref: "StudentRepository:create" });
-      
+
       const result = await pool.query(
         'INSERT INTO students (name, email, date_of_birth) VALUES ($1, $2, $3) RETURNING *',
         [name, email, date_of_birth]
@@ -27,12 +27,24 @@ export class StudentRepository implements IStudentRepository {
     }
   }
 
-  async findAll(trace_id?: string): Promise<IStudent[]> {
+  async findAll(page: number, limit: number, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
     try {
-      this.logger.info({}, { description: "Fetching all students", trace_id, ref: "StudentRepository:findAll" });
-      
-      const result = await pool.query('SELECT * FROM students');
-      return result.rows;
+      this.logger.info({ page, limit }, { description: "Fetching all students", trace_id, ref: "StudentRepository:findAll" });
+      const offset = (page - 1) * limit;
+      // Fetch paginated students
+      const studentsQuery = await pool.query(
+        'SELECT * FROM students ORDER BY id LIMIT $1 OFFSET $2',
+        [limit, offset]
+      );
+
+      // Fetch total count of students
+      const totalCountQuery = await pool.query('SELECT COUNT(*) FROM students');
+      const totalCount = parseInt(totalCountQuery.rows[0].count, 10);
+
+      return {
+        students: studentsQuery.rows,
+        totalCount,
+      };
     } catch (error: any) {
       this.logger.error(error, { description: "Error fetching students", trace_id, ref: "StudentRepository:findAll" });
       throw new Error('Failed to retrieve students.');
@@ -42,7 +54,7 @@ export class StudentRepository implements IStudentRepository {
   async findById(id: string, trace_id?: string): Promise<IStudent | null> {
     try {
       this.logger.info({ id }, { description: "Fetching student by ID", trace_id, ref: "StudentRepository:findById" });
-      
+
       const result = await pool.query('SELECT * FROM students WHERE id = $1', [id]);
       return result.rows[0] || null;
     } catch (error: any) {
@@ -54,13 +66,13 @@ export class StudentRepository implements IStudentRepository {
   async update(id: string, student: IStudent, trace_id?: string): Promise<IStudent | null> {
     try {
       this.logger.info({ id, student }, { description: "Updating student details", trace_id, ref: "StudentRepository:update" });
-      
+
       const { name, email, date_of_birth } = student;
       const result = await pool.query(
         'UPDATE students SET name = $1, email = $2, date_of_birth = $3 WHERE id = $4 RETURNING *',
         [name, email, date_of_birth, id]
       );
-      
+
       return result.rows[0] || null;
     } catch (error: any) {
       this.logger.error(error, { description: `Error updating student with id ${id}`, trace_id, ref: "StudentRepository:update" });
@@ -71,7 +83,7 @@ export class StudentRepository implements IStudentRepository {
   async delete(id: string, trace_id?: string): Promise<void> {
     try {
       this.logger.info({ id }, { description: "Deleting student", trace_id, ref: "StudentRepository:delete" });
-      
+
       await pool.query('DELETE FROM students WHERE id = $1', [id]);
       this.logger.info({ id }, { description: "Student deleted successfully", trace_id, ref: "StudentRepository:delete" });
     } catch (error: any) {

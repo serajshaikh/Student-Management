@@ -8,23 +8,23 @@ import { IStudentService } from '../interfaces/IStudentService';
 export class StudentService implements IStudentService {
   constructor(@inject(TYPES.StudentRepository) private studentRepository: StudentRepository) { }
 
-  async createStudent(student: IStudent, trace_id?:string): Promise<IStudent> {
+  async createStudent(student: IStudent, trace_id?: string): Promise<IStudent> {
     return this.studentRepository.create(student, trace_id);
   }
 
-  async getAllStudents(trace_id?:string): Promise<IStudent[]> {
-    return this.studentRepository.findAll(trace_id);
+  async getAllStudents(page: number, limit: number, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
+    return this.studentRepository.findAll(page, limit, trace_id);
   }
 
-  async getStudentById(id: string, trace_id?:string): Promise<IStudent | null> {
+  async getStudentById(id: string, trace_id?: string): Promise<IStudent | null> {
     return this.studentRepository.findById(id, trace_id);
   }
 
-  async updateStudent(id: string, student: IStudent, trace_id?:string): Promise<IStudent | null> {
+  async updateStudent(id: string, student: IStudent, trace_id?: string): Promise<IStudent | null> {
     return this.studentRepository.update(id, student, trace_id);
   }
 
-  async deleteStudent(id: string, trace_id?:string): Promise<void> {
+  async deleteStudent(id: string, trace_id?: string): Promise<void> {
     return this.studentRepository.delete(id, trace_id);
   }
 }
