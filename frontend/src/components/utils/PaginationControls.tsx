@@ -28,7 +28,7 @@ export const PaginationControls = ({ pagination, currentPage, setCurrentPage, en
       </Form.Select>
       entries
     </span>
-    <Pagination className="form-field-height">
+    <Pagination className="form-field-height mt-2 mb-1">
       <Pagination.First
         onClick={() => setCurrentPage(1)}
         disabled={currentPage === 1}
@@ -37,23 +37,18 @@ export const PaginationControls = ({ pagination, currentPage, setCurrentPage, en
         onClick={() => setCurrentPage(currentPage - 1)}
         disabled={currentPage === 1}
       />
-      {Array.from({ length: pagination.totalPages }, (_, i) => (
-        <Pagination.Item
-          key={i + 1}
-          active={i + 1 === currentPage}
-          onClick={() => setCurrentPage(i + 1)}
-        >
-          {i + 1}
-        </Pagination.Item>
-      ))}
-      <Pagination.Next
-        onClick={() => setCurrentPage(currentPage + 1)}
-        disabled={currentPage === pagination.totalPages}
-      />
-      <Pagination.Last
-        onClick={() => setCurrentPage(pagination.totalPages)}
-        disabled={currentPage === pagination.totalPages}
-      />
-    </Pagination>
-  </div>
+      <Pagination.Item className="disabled text-dark border-0 fst-italic">
+      {currentPage + "/" + pagination.totalPages}
+    </Pagination.Item>
+
+    <Pagination.Next
+      onClick={() => setCurrentPage(currentPage + 1)}
+      disabled={currentPage === pagination.totalPages}
+    />
+    <Pagination.Last
+      onClick={() => setCurrentPage(pagination.totalPages)}
+      disabled={currentPage === pagination.totalPages}
+    />
+  </Pagination>
+  </div >
 );

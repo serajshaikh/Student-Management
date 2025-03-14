@@ -28,7 +28,6 @@ th {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 10px;
 }
 
 .table-header {
@@ -36,4 +35,22 @@ th {
   top: 0;
   background: white;
   z-index: 10;
+}
+.edit-icon,
+.delete-icon {
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.edit-icon:hover {
+  color: #003670 !important;
+}
+
+.delete-icon:hover {
+  color: #ff0019 !important;
+}
+
+.custom-tooltip {
+  padding: 0px 8px 1px 8px; 
+  font-size: 12px; 
 }

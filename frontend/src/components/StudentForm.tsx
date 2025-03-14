@@ -1,64 +1,57 @@
-// File: src/components/StudentForm.tsx
-
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import Swal from 'sweetalert2';
-import { IStudent } from '../interfaces/IStudent';
+import { useState, useEffect } from "react";
+import { Button, Form } from "react-bootstrap";
+import { IStudent } from "../interfaces/IStudent";
 
 interface StudentFormProps {
-  initialData?: IStudent;
-  onSubmit: (student: Omit<IStudent, 'id'>) => Promise<void>;
+  onSubmit: (studentData: Omit<IStudent, "id">) => void;
+  initialData?: IStudent | null;
 }
 
-const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSubmit }) => {
-  const [name, setName] = useState(initialData?.name || '');
-  const [email, setEmail] = useState(initialData?.email || '');
-  const [dateOfBirth, setDateOfBirth] = useState(initialData?.date_of_birth || '');
+const StudentForm = ({ onSubmit, initialData }: StudentFormProps) => {
+  const [formData, setFormData] = useState<Omit<IStudent, "id">>({
+    name: "",
+    email: "",
+    date_of_birth: "",
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await onSubmit({ name, email, date_of_birth: dateOfBirth });
-      Swal.fire('Success!', 'Student saved successfully.', 'success');
-    } catch (error) {
-      Swal.fire('Error!', 'Failed to save student.', 'error');
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name,
+        email: initialData.email,
+        date_of_birth: initialData.date_of_birth,
+      });
     }
+  }, [initialData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="name">
+      <Form.Group className="mb-3">
         <Form.Label>Name</Form.Label>
-        <Form.Control
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
       </Form.Group>
 
-      <Form.Group controlId="email">
+      <Form.Group className="mb-3">
         <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
       </Form.Group>
 
-      <Form.Group controlId="dateOfBirth">
+      <Form.Group className="mb-3">
         <Form.Label>Date of Birth</Form.Label>
-        <Form.Control
-          type="date"
-          value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)}
-          required
-        />
+        <Form.Control type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} required />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
-        Save
+      <Button variant="primary" type="submit" className="w-100">
+        {initialData ? "Update Member" : "Add Member"}
       </Button>
     </Form>
   );
