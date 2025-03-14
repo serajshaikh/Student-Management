@@ -110,7 +110,7 @@ const MembersTable: React.FC = () => {
 
 
   return (
-    <div className="table-container mt-3 border p-3 rounded bg-light">
+    <div className="table-container mt-3 border p-2 rounded bg-light">
       <h2>All Members</h2>
       <div className="d-flex justify-content-between mb-3 p-0">
         <InputGroup className="flex-grow-1" style={{ maxWidth: "300px" }}>
@@ -176,7 +176,7 @@ const MembersTable: React.FC = () => {
           entries
         </span>
 
-        <Pagination className="form-field-height mt-3">
+        <Pagination className="form-field-height">
           <Pagination.First
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}

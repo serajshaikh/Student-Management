@@ -1,9 +1,12 @@
 import { injectable, inject } from 'inversify';
+import format from 'pg-format';
 import pool from '../config/database/db';
 import { IStudent } from '../models/IStudent';
 import { IStudentRepository } from '../interfaces/IStudentRepository';
 import { ILogger } from '../interfaces/ILogger';
 import { TYPES } from '../di/Types';
+import { ReqData } from '../utils/validate/RequestSchema';
+import { ServiceException } from '../utils/error/ServiceException';
 
 @injectable()
 export class StudentRepository implements IStudentRepository {
@@ -26,7 +29,26 @@ export class StudentRepository implements IStudentRepository {
       throw new Error(error.code === '23505' ? 'Email already exists. Please use a different email.' : 'Failed to create student. Please try again.');
     }
   }
+  async createStudents(students: ReqData[], trace_id?: string): Promise<IStudent[]> {
+    try {
+      this.logger.info(students, { description: "Creating students in bulk", trace_id, ref: "StudentRepository:createStudents" });
+      const values = students.map(({ name, email, date_of_birth }) => [name, email, date_of_birth]);
 
+      const query = format(
+        'INSERT INTO students (name, email, date_of_birth) VALUES %L RETURNING *',
+        values
+      );
+
+      const result = await pool.query(query);
+
+      this.logger.info(result.rows, { description: "Students created successfully", trace_id, ref: "StudentRepository:create" });
+
+      return result.rows;
+    } catch (error: any) {
+      this.logger.error(error, { description: "Error creating students", trace_id, ref: "StudentRepository:create" });
+      throw new ServiceException({ message: error.code === '23505' ? 'Duplicate email detected. Please use unique emails.' : 'Failed to create students. Please try again.', statusCode: 400, trace_id });
+    }
+  }
   async findAll(page: number, limit: number, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
     try {
       this.logger.info({ page, limit }, { description: "Fetching all students", trace_id, ref: "StudentRepository:findAll" });
