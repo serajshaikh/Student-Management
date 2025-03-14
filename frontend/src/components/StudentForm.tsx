@@ -1,7 +1,9 @@
+// File: src/components/StudentForm.tsx
+
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { IStudent } from '../types/IStudent';
+import { IStudent } from '../interfaces/IStudent';
 
 interface StudentFormProps {
   initialData?: IStudent;

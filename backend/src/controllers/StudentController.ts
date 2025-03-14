@@ -20,18 +20,23 @@ export class StudentController implements IStudentController {
   ) { }
 
   @httpGet('/')
-  async getAllStudents(@queryParam('page') page: number, @queryParam('limit') limit: number, req: Request, res: Response): Promise<void> {
+  async getAllStudents(@queryParam('page') page: number, @queryParam('limit') limit: number, @queryParam('search') search: string, req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;
     const pageNumber = page || 1;
     const limitNumber = limit || 10;
     try {
-      this.logger.info({}, { description: "Fetching all students", trace_id, ref: "StudentController:getAllStudents" });
+      this.logger.info({}, { description: "Fetching students", trace_id, ref: "StudentController:getAllStudents" });
+
       if (pageNumber < 1 || limitNumber < 1) {
         throw new ServiceException({ message: "Page and limit must be positive integers", trace_id, statusCode: 404 });
       }
-      const { students, totalCount } = await this.studentService.getAllStudents(pageNumber, limitNumber, trace_id);
+
+      // Pass search term to the service
+      const { students, totalCount } = await this.studentService.getAllStudents(pageNumber, limitNumber, search, trace_id);
       const totalPages = Math.ceil(totalCount / limitNumber);
+
       this.logger.info({ students, totalCount, totalPages }, { description: "Students fetched successfully", trace_id, ref: "StudentController:getAllStudents" });
+
       const response = {
         pagination: {
           totalCount,
@@ -40,13 +45,15 @@ export class StudentController implements IStudentController {
           limit: limitNumber,
         },
         students
-      }
+      };
+
       this.responseHandler.success({ responseData: response, statusCode: 200, response: res });
     } catch (error) {
       this.logger.error(error, { description: "Error fetching students", trace_id, ref: "StudentController:getAllStudents" });
       this.responseHandler.failure({ response: res, error });
     }
   }
+
 
   @httpGet('/:id')
   async getStudentById(@requestParam('id') id: string, req: Request, res: Response): Promise<void> {

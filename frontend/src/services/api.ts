@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
-export const getStudents = async (page: number, limit: number) => {
+export const getStudents = async (page: number, limit: number, searchTerm?: string) => {
   const response = await axios.get(`${API_BASE_URL}/students`, {
-    params: { page, limit },
+    params: { page, limit, search: searchTerm },
   });
   return response.data;
 };
@@ -24,6 +24,6 @@ export const updateStudent = async (id: string, student: { name: string; email: 
   return response.data;
 };
 
-export const deleteStudent = async (id: string) => {
+export const deleteStudent = async (id: number) => {
   await axios.delete(`${API_BASE_URL}/students/${id}`);
 };

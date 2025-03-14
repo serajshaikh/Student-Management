@@ -17,8 +17,8 @@ export class StudentService implements IStudentService {
     return this.studentRepository.createStudents(students, trace_id);
   }
 
-  async getAllStudents(page: number, limit: number, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
-    return this.studentRepository.findAll(page, limit, trace_id);
+  async getAllStudents(page: number, limit: number, search?: string, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
+    return this.studentRepository.findAll(page, limit, search, trace_id);
   }
 
   async getStudentById(id: string, trace_id?: string): Promise<IStudent | null> {

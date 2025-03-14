@@ -7,7 +7,7 @@ th {
   padding: 0 12px;
 }
 .table-container {
-  height: 80vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
 }
@@ -16,6 +16,8 @@ th {
   flex-grow: 1;
   overflow-y: auto;
   max-height: 65vh;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #aaa transparent; /* For Firefox */
 }
 
 .table-content {
@@ -26,4 +28,12 @@ th {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 10px;
+}
+
+.table-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
 }

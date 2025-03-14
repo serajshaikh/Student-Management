@@ -49,20 +49,40 @@ export class StudentRepository implements IStudentRepository {
       throw new ServiceException({ message: error.code === '23505' ? 'Duplicate email detected. Please use unique emails.' : 'Failed to create students. Please try again.', statusCode: 400, trace_id });
     }
   }
-  async findAll(page: number, limit: number, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
+  async findAll(page: number, limit: number, search?: string, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
     try {
-      this.logger.info({ page, limit }, { description: "Fetching all students", trace_id, ref: "StudentRepository:findAll" });
-      const offset = (page - 1) * limit;
-      // Fetch paginated students
-      const studentsQuery = await pool.query(
-        'SELECT * FROM students ORDER BY id LIMIT $1 OFFSET $2',
-        [limit, offset]
-      );
-
-      // Fetch total count of students
-      const totalCountQuery = await pool.query('SELECT COUNT(*) FROM students');
+      this.logger.info({ page, limit, search }, { description: "Fetching students", trace_id, ref: "StudentRepository:findAll" });
+  
+      // Ensure `page` and `limit` are numbers
+      const pageNumber = Number(page);
+      const limitNumber = Number(limit);
+  
+      if (isNaN(pageNumber) || isNaN(limitNumber)) {
+        throw new ServiceException({message:"Page and limit must be valid numbers.", statusCode:422, trace_id});
+      }
+  
+      const offset = (pageNumber - 1) * limitNumber;
+      
+      // Construct the WHERE clause dynamically
+      let whereClause = "";
+      const params: any[] = [];
+  
+      if (search) {
+        whereClause = " WHERE LOWER(name) LIKE $1 OR LOWER(email) LIKE $1";
+        params.push(`%${search.toLowerCase()}%`);
+      }
+  
+      const query = `SELECT * FROM students${whereClause} ORDER BY id LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+      params.push(limitNumber, offset);
+  
+      const countQuery = `SELECT COUNT(*) FROM students${whereClause}`;
+      const countParams = search ? [params[0]] : [];  // Ensure correct params for countQuery
+  
+      const studentsQuery = await pool.query(query, params);
+      const totalCountQuery = await pool.query(countQuery, countParams);
+  
       const totalCount = parseInt(totalCountQuery.rows[0].count, 10);
-
+  
       return {
         students: studentsQuery.rows,
         totalCount,
@@ -72,6 +92,9 @@ export class StudentRepository implements IStudentRepository {
       throw new Error('Failed to retrieve students.');
     }
   }
+  
+  
+  
 
   async findById(id: string, trace_id?: string): Promise<IStudent | null> {
     try {
