@@ -1,7 +1,7 @@
 
 export interface IServiceExceptionOptions {
     message: string;
-    trace_id: string|null
+    trace_id?: string
     payload?: unknown;
     additionalInfo?: Record<string, unknown> | null;
     statusCode:number
@@ -9,7 +9,7 @@ export interface IServiceExceptionOptions {
 
 export class ServiceException extends Error {
     message: string;
-    trace_id: string | null;
+    trace_id?: string;
     additionalInfo?: Record<string, unknown> | null;
     payload: unknown;
     statusCode: number;

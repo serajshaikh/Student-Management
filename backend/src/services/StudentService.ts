@@ -3,6 +3,7 @@ import { IStudent } from '../models/IStudent';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { TYPES } from '../di/Types';
 import { IStudentService } from '../interfaces/IStudentService';
+import { ReqData } from '../utils/validate/RequestSchema';
 
 @injectable()
 export class StudentService implements IStudentService {
@@ -10,6 +11,10 @@ export class StudentService implements IStudentService {
 
   async createStudent(student: IStudent, trace_id?: string): Promise<IStudent> {
     return this.studentRepository.create(student, trace_id);
+  }
+
+  createBulkStudents(students: ReqData[], trace_id?: string): Promise<IStudent[]> {
+    return this.studentRepository.createStudents(students, trace_id);
   }
 
   async getAllStudents(page: number, limit: number, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {

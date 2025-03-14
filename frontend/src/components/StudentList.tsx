@@ -93,6 +93,22 @@ const MembersTable: React.FC = () => {
     }
   };
 
+  const calculateAge = (dob: string | Date): number => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+
+    return age;
+  };
+
+
   return (
     <div className="table-container mt-3 border p-3 rounded bg-light">
       <h2>All Members</h2>
@@ -129,7 +145,7 @@ const MembersTable: React.FC = () => {
                 <td>{member.id}</td>
                 <td>{member.name}</td>
                 <td>{member.email}</td>
-                <td>{member.date_of_birth}</td>
+                <td>{calculateAge(member.date_of_birth)}</td>
                 <td>
                   <MdDelete
                     className="text-danger fs-5 m-0"

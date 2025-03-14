@@ -93,6 +93,39 @@ export class StudentController implements IStudentController {
     }
   }
 
+  @httpPost('/bulk-records')
+  async createBulkStudents(@requestBody() students: IStudent[], req: Request, res: Response): Promise<void> {
+    const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("POC")) as string;
+
+    this.logger.info(students, { description: "Creating new students", trace_id, ref: "StudentController:createStudents" });
+
+    try {
+      if (!Array.isArray(students) || students.length === 0) {
+        throw new Error("Invalid input. Expected an array of students.");
+      }
+
+      const studentPayloads = students.map(student => ({
+        ...student,
+        date_of_birth: student.date_of_birth instanceof Date
+          ? student.date_of_birth.toISOString().split('T')[0]
+          : student.date_of_birth
+      }));
+
+      studentPayloads.forEach(student => {
+        this.responseHandler.validate<ReqData>({ schema: ReqSchema, payload: student }, trace_id);
+      });
+
+      const newStudents = await this.studentService.createBulkStudents(studentPayloads, trace_id);
+
+      this.logger.info(newStudents, { description: "Students created successfully", trace_id, ref: "StudentController:createStudents" });
+
+      this.responseHandler.success({ responseData: newStudents, statusCode: 201, response: res });
+
+    } catch (error) {
+      this.logger.error(error, { description: "Error creating students", trace_id, ref: "StudentController:createStudents" });
+      this.responseHandler.failure({ response: res, error });
+    }
+  }
 
   @httpPut('/:id')
   async updateStudent(@requestParam('id') id: string, @requestBody() student: IStudent, req: Request, res: Response): Promise<void> {
