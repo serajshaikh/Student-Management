@@ -67,7 +67,7 @@ export class StudentController implements IStudentController {
         students
       };
 
-      this.responseHandler.success({ responseData: response, statusCode: 200, response: res });
+      this.responseHandler.success({ responseData: response, statusCode: 200, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error fetching students", trace_id, ref: "StudentController:getAllStudents" });
       this.responseHandler.failure({ response: res, error });
@@ -89,10 +89,10 @@ export class StudentController implements IStudentController {
       if (!student) {
         throw new ServiceException({ message: "Student not found", trace_id, statusCode: 404 });
       }
-      this.responseHandler.success({ responseData: student, statusCode: 200, response: res });
+      this.responseHandler.success({ responseData: student, statusCode: 200, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error fetching student by ID", trace_id, ref: "StudentController:getStudentById" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
 
@@ -119,11 +119,11 @@ export class StudentController implements IStudentController {
       const newStudent = await this.studentService.createStudent(student, trace_id);
       this.logger.info(newStudent, { description: "Student created successfully", trace_id, ref: "StudentController:createStudent" });
 
-      this.responseHandler.success({ responseData: newStudent, statusCode: 201, response: res });
+      this.responseHandler.success({ responseData: newStudent, statusCode: 201, response: res }, trace_id);
 
     } catch (error) {
       this.logger.error(error, { description: "Error creating student", trace_id, ref: "StudentController:createStudent" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
 
@@ -157,11 +157,11 @@ export class StudentController implements IStudentController {
 
       this.logger.info(newStudents, { description: "Students created successfully", trace_id, ref: "StudentController:createStudents" });
 
-      this.responseHandler.success({ responseData: newStudents, statusCode: 201, response: res });
+      this.responseHandler.success({ responseData: newStudents, statusCode: 201, response: res }, trace_id);
 
     } catch (error) {
       this.logger.error(error, { description: "Error creating students", trace_id, ref: "StudentController:createStudents" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
 
@@ -193,10 +193,10 @@ export class StudentController implements IStudentController {
 
       this.logger.info(updatedStudent, { description: "Student updated successfully", trace_id, ref: "StudentController:updateStudent" });
 
-      this.responseHandler.success({ responseData: updatedStudent, statusCode: 200, response: res });
+      this.responseHandler.success({ responseData: updatedStudent, statusCode: 200, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error updating student", trace_id, ref: "StudentController:updateStudent" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
 
@@ -214,10 +214,10 @@ export class StudentController implements IStudentController {
       await this.studentService.deleteStudent(id, trace_id);
       this.logger.info({ id }, { description: "Student deleted successfully", trace_id, ref: "StudentController:deleteStudent" });
 
-      this.responseHandler.success({ responseData: null, statusCode: 204, response: res });
+      this.responseHandler.success({ responseData: {message:"Student Deleted Successfully", trace_id}, statusCode: 204, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error deleting student", trace_id, ref: "StudentController:deleteStudent" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
 }
