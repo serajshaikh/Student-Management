@@ -17,8 +17,14 @@ export class StudentController implements IStudentController {
     @inject(TYPES.StudentService) private studentService: IStudentService,
     @inject(TYPES.ResponseHandler) private responseHandler: IResponseHandler,
     @inject(TYPES.Logger) private logger: ILogger
-  ) { }
+  ) {}
 
+  /**
+   * @description Fetches all students with pagination and search functionality.
+   * @param {number} page - Page number for pagination.
+   * @param {number} limit - Number of students per page.
+   * @param {string} search - Search term for filtering students.
+   */
   @httpGet('/')
   async getAllStudents(@queryParam('page') page: number, @queryParam('limit') limit: number, @queryParam('search') search: string, req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;
@@ -31,7 +37,6 @@ export class StudentController implements IStudentController {
         throw new ServiceException({ message: "Page and limit must be positive integers", trace_id, statusCode: 404 });
       }
 
-      // Pass search term to the service
       const { students, totalCount } = await this.studentService.getAllStudents(pageNumber, limitNumber, search, trace_id);
       const totalPages = Math.ceil(totalCount / limitNumber);
 
@@ -54,7 +59,10 @@ export class StudentController implements IStudentController {
     }
   }
 
-
+  /**
+   * @description Fetches a student by ID.
+   * @param {string} id - Student ID.
+   */
   @httpGet('/:id')
   async getStudentById(@requestParam('id') id: string, req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;
@@ -73,6 +81,10 @@ export class StudentController implements IStudentController {
     }
   }
 
+  /**
+   * @description Creates a new student record.
+   * @param {IStudent} student - Student data.
+   */
   @httpPost('/')
   async createStudent(@requestBody() student: IStudent, req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;
@@ -100,6 +112,10 @@ export class StudentController implements IStudentController {
     }
   }
 
+  /**
+   * @description Creates multiple student records in bulk.
+   * @param {IStudent[]} students - List of students to create.
+   */
   @httpPost('/bulk-records')
   async createBulkStudents(@requestBody() students: IStudent[], req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("POC")) as string;
@@ -134,6 +150,11 @@ export class StudentController implements IStudentController {
     }
   }
 
+  /**
+   * @description Updates a student's details by ID.
+   * @param {string} id - Student ID.
+   * @param {IStudent} student - Updated student data.
+   */
   @httpPut('/:id')
   async updateStudent(@requestParam('id') id: string, @requestBody() student: IStudent, req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;
@@ -164,6 +185,10 @@ export class StudentController implements IStudentController {
     }
   }
 
+  /**
+   * @description Deletes a student by ID.
+   * @param {string} id - Student ID.
+   */
   @httpDelete('/:id')
   async deleteStudent(@requestParam('id') id: string, req: Request, res: Response): Promise<void> {
     const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;

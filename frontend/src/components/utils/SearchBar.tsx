@@ -1,7 +1,11 @@
 import FormControl from "react-bootstrap/esm/FormControl";
 import InputGroup from "react-bootstrap/esm/InputGroup";
-
-export const SearchBar = ({ searchTerm, setSearchTerm, setCurrentPage }: { searchTerm: string, setSearchTerm: (value: string) => void, setCurrentPage: (page: number) => void }) => (
+interface ISearchBar {
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  setCurrentPage: (page: number) => void;
+}
+export const SearchBar = ({ searchTerm, setSearchTerm, setCurrentPage }:ISearchBar ) => (
   <InputGroup className="flex-grow-1" style={{ maxWidth: "300px" }}>
     <FormControl
       className="form-control-sm form-field-height"

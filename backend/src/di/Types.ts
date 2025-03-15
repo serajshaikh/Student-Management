@@ -1,3 +1,7 @@
+
+/**
+ * @description InversifyJS Dependency Identifiers
+ */
 const TYPES = {
   StudentService: Symbol.for('StudentService'),
   StudentRepository: Symbol.for('StudentRepository'),

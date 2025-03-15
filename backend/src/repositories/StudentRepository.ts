@@ -8,10 +8,22 @@ import { TYPES } from '../di/Types';
 import { ReqData } from '../utils/validate/RequestSchema';
 import { ServiceException } from '../utils/error/ServiceException';
 
+/**
+ * @description Repository class for handling student database operations.
+ */
 @injectable()
 export class StudentRepository implements IStudentRepository {
+  /**
+   * @param {ILogger} logger - Logger instance for logging operations.
+   */
   constructor(@inject(TYPES.Logger) private logger: ILogger) { }
 
+  /**
+   * @description Creates a new student record in the database.
+   * @param {IStudent} student - Student data to be inserted.
+   * @param {string} [trace_id] - Optional trace ID for logging.
+   * @returns {Promise<IStudent>} The newly created student.
+   */
   async create(student: IStudent, trace_id?: string): Promise<IStudent> {
     try {
       const { name, email, date_of_birth } = student;
@@ -29,6 +41,13 @@ export class StudentRepository implements IStudentRepository {
       throw new Error(error.code === '23505' ? 'Email already exists. Please use a different email.' : 'Failed to create student. Please try again.');
     }
   }
+
+  /**
+   * @description Creates multiple students in bulk.
+   * @param {ReqData[]} students - Array of students to be inserted.
+   * @param {string} [trace_id] - Optional trace ID for logging.
+   * @returns {Promise<IStudent[]>} List of created students.
+   */
   async createStudents(students: ReqData[], trace_id?: string): Promise<IStudent[]> {
     try {
       this.logger.info(students, { description: "Creating students in bulk", trace_id, ref: "StudentRepository:createStudents" });
@@ -49,40 +68,46 @@ export class StudentRepository implements IStudentRepository {
       throw new ServiceException({ message: error.code === '23505' ? 'Duplicate email detected. Please use unique emails.' : 'Failed to create students. Please try again.', statusCode: 400, trace_id });
     }
   }
+
+  /**
+   * @description Fetches a paginated list of students with optional search.
+   * @param {number} page - Page number.
+   * @param {number} limit - Number of records per page.
+   * @param {string} [search] - Optional search keyword.
+   * @param {string} [trace_id] - Optional trace ID for logging.
+   * @returns {Promise<{ students: IStudent[]; totalCount: number }>} Paginated student data.
+   */
   async findAll(page: number, limit: number, search?: string, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }> {
     try {
       this.logger.info({ page, limit, search }, { description: "Fetching students", trace_id, ref: "StudentRepository:findAll" });
-  
-      // Ensure `page` and `limit` are numbers
+
       const pageNumber = Number(page);
       const limitNumber = Number(limit);
-  
+
       if (isNaN(pageNumber) || isNaN(limitNumber)) {
-        throw new ServiceException({message:"Page and limit must be valid numbers.", statusCode:422, trace_id});
+        throw new ServiceException({ message: "Page and limit must be valid numbers.", statusCode: 422, trace_id });
       }
-  
+
       const offset = (pageNumber - 1) * limitNumber;
-      
-      // Construct the WHERE clause dynamically
       let whereClause = "";
       const params: any[] = [];
-  
+
       if (search) {
         whereClause = " WHERE LOWER(name) LIKE $1 OR LOWER(email) LIKE $1";
         params.push(`%${search.toLowerCase()}%`);
       }
-  
+
       const query = `SELECT * FROM students${whereClause} ORDER BY id LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
       params.push(limitNumber, offset);
-  
+
       const countQuery = `SELECT COUNT(*) FROM students${whereClause}`;
-      const countParams = search ? [params[0]] : [];  // Ensure correct params for countQuery
-  
+      const countParams = search ? [params[0]] : [];
+
       const studentsQuery = await pool.query(query, params);
       const totalCountQuery = await pool.query(countQuery, countParams);
-  
+
       const totalCount = parseInt(totalCountQuery.rows[0].count, 10);
-  
+
       return {
         students: studentsQuery.rows,
         totalCount,
@@ -92,10 +117,13 @@ export class StudentRepository implements IStudentRepository {
       throw new Error('Failed to retrieve students.');
     }
   }
-  
-  
-  
 
+  /**
+   * @description Fetches a student by ID.
+   * @param {string} id - Student ID.
+   * @param {string} [trace_id] - Optional trace ID for logging.
+   * @returns {Promise<IStudent | null>} The student record, if found.
+   */
   async findById(id: string, trace_id?: string): Promise<IStudent | null> {
     try {
       this.logger.info({ id }, { description: "Fetching student by ID", trace_id, ref: "StudentRepository:findById" });
@@ -108,6 +136,13 @@ export class StudentRepository implements IStudentRepository {
     }
   }
 
+  /**
+   * @description Updates a student record.
+   * @param {string} id - Student ID.
+   * @param {IStudent} student - Updated student data.
+   * @param {string} [trace_id] - Optional trace ID for logging.
+   * @returns {Promise<IStudent | null>} The updated student record, if found.
+   */
   async update(id: string, student: IStudent, trace_id?: string): Promise<IStudent | null> {
     try {
       this.logger.info({ id, student }, { description: "Updating student details", trace_id, ref: "StudentRepository:update" });
@@ -125,6 +160,12 @@ export class StudentRepository implements IStudentRepository {
     }
   }
 
+  /**
+   * @description Deletes a student record by ID.
+   * @param {string} id - Student ID.
+   * @param {string} [trace_id] - Optional trace ID for logging.
+   * @returns {Promise<void>}
+   */
   async delete(id: string, trace_id?: string): Promise<void> {
     try {
       this.logger.info({ id }, { description: "Deleting student", trace_id, ref: "StudentRepository:delete" });
