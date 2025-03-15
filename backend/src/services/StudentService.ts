@@ -6,8 +6,13 @@ import { IStudentService } from '../interfaces/IStudentService';
 import { ReqData } from '../utils/validate/RequestSchema';
 
 @injectable()
+
 export class StudentService implements IStudentService {
   constructor(@inject(TYPES.StudentRepository) private studentRepository: StudentRepository) { }
+
+  async testDatabaseConnection(): Promise<boolean> {
+    return this.studentRepository.testConnection();
+  }
 
   async createStudent(student: IStudent, trace_id?: string): Promise<IStudent> {
     return this.studentRepository.create(student, trace_id);

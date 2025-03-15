@@ -19,6 +19,20 @@ export class StudentRepository implements IStudentRepository {
   constructor(@inject(TYPES.Logger) private logger: ILogger) { }
 
   /**
+   * @description Tests the database connection.
+   * @returns {Promise<boolean>} Connection status.
+   */
+  async testConnection(): Promise<boolean> {
+    try {
+      await pool.query('SELECT 1');
+      return true;
+    } catch (error) {
+      this.logger.error(error, { description: "Database connection failed", ref: "StudentRepository:testConnection" });
+      return false;
+    }
+  }
+  
+  /**
    * @description Creates a new student record in the database.
    * @param {IStudent} student - Student data to be inserted.
    * @param {string} [trace_id] - Optional trace ID for logging.

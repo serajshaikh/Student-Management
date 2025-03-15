@@ -2,6 +2,7 @@ import { IStudent } from "../models/IStudent";
 import { ReqData } from "../utils/validate/RequestSchema";
 
 export interface IStudentService {
+    testDatabaseConnection(): Promise<boolean>
     createStudent(student: IStudent, trace_id?: string): Promise<IStudent>;
     createBulkStudents(students: ReqData[], trace_id?: string): Promise<IStudent[]>
     getAllStudents(page: number, limit: number, search?: string, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }>;

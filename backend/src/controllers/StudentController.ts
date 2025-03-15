@@ -19,6 +19,21 @@ export class StudentController implements IStudentController {
     @inject(TYPES.Logger) private logger: ILogger
   ) {}
 
+  @httpGet('/test-db')
+  async testDatabaseConnection(req: Request, res: Response): Promise<void> {
+    const trace_id = (req.headers?.['X-App-Trace-Id'] ?? CommonUtils.genUlid("trx")) as string;
+    this.logger.info({}, { description: "Testing database connection", trace_id, ref: "StudentController:testDatabaseConnection" });
+    try {
+      const isConnected = await this.studentService.testDatabaseConnection();
+      if (!isConnected) {
+        throw new ServiceException({ message: "Database connection failed", trace_id, statusCode: 500 });
+      }
+      this.responseHandler.success({ responseData: { message: "Database connection successful" }, statusCode: 200, response: res });
+    } catch (error) {
+      this.logger.error(error, { description: "Error testing database connection", trace_id, ref: "StudentController:testDatabaseConnection" });
+      this.responseHandler.failure({ response: res, error });
+    }
+  }
   /**
    * @description Fetches all students with pagination and search functionality.
    * @param {number} page - Page number for pagination.

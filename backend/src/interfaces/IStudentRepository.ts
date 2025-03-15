@@ -2,6 +2,7 @@ import { IStudent } from '../models/IStudent';
 import { ReqData } from '../utils/validate/RequestSchema';
 
 export interface IStudentRepository {
+  testConnection(): Promise<boolean>
   create(student: IStudent, trace_id?: string): Promise<IStudent>;
   createStudents(students: ReqData[], trace_id?: string): Promise<IStudent[]>
   findAll(age: number, limit: number, search?: string, trace_id?: string): Promise<{ students: IStudent[]; totalCount: number }>;
