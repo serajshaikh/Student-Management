@@ -39,15 +39,14 @@ This is a **Student Management System** built with **React.js** (frontend), **No
 ## Setup Instructions
 
 ### Step 1: Extract the Shared Code
-- Download or clone the project repository.
+- Download  the project repository.
 - Extract the shared code into your desired directory.
 
 ### Step 2: Configure the Database
 1. **Install PostgreSQL**:
-   - If you don’t have PostgreSQL installed, download and install it from [here](https://www.postgresql.org/download/).
 2. **Create a Database**:
-   - Open **pgAdmin** or any PostgreSQL client.
-   - Create a new database named `student_management`.
+   - Open terminal.
+   - execute the query script available at db_script folder.
 3. **Update Environment Variables**:
    - Navigate to the `backend` folder.
    - Open the `.env` file and update the following fields with your database credentials:
