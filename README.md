@@ -71,7 +71,7 @@ This is a **Student Management System** built with **React.js** (frontend), **No
    npm install
 4. **Run the backend Application**:
    ```bash
-   npm run dev:nodemon
+   npm run dev
 4. **Run the backend Application**:
    ```bash
    [http://localhost:5000/api/students](http://localhost:5000/api/students)

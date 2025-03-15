@@ -8,7 +8,7 @@ export class Logger implements ILogger {
         format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.printf(({ timestamp, level, message, metadata }) => {
-                return `${timestamp} [${level.toUpperCase()}]: ${metadata ? JSON.stringify(metadata) : ""}`;
+                return `${timestamp} ${level.toUpperCase()}: ${metadata ? JSON.stringify(metadata) : ""}`;
             })
         ),
         transports: [
