@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { IStudent } from "../interfaces/IStudent";
 
-interface StudentFormProps {
+interface IStudentFormProps {
   onSubmit: (studentData: Omit<IStudent, "id">) => void;
   initialData?: IStudent | null;
 }
-
-const StudentForm = ({ onSubmit, initialData }: StudentFormProps) => {
+/**
+ * StudentForm component for adding or editing student details.
+ *
+ * @component
+ * @param {IStudentFormProps} props - Component props.
+ * @returns {JSX.Element} The rendered StudentForm component.
+ */
+const StudentForm = ({ onSubmit, initialData }: IStudentFormProps) => {
   const [formData, setFormData] = useState<Omit<IStudent, "id">>({
     name: "",
     email: "",

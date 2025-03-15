@@ -7,6 +7,13 @@ interface IPaginationControls {
   entriesPerPage: number,
   setEntriesPerPage: (entries: number) => void,
 }
+/**
+ * Renders pagination controls with page navigation and entries per page selection.
+ *
+ * @component
+ * @param {IPaginationControls} props - Component props
+ * @returns {JSX.Element} The rendered PaginationControls component
+ */
 export const PaginationControls = ({ pagination, currentPage, setCurrentPage, entriesPerPage, setEntriesPerPage }: IPaginationControls) => (
   <div className="pagination-container d-flex justify-content-between align-items-center">
     <span className="d-flex align-items-center">

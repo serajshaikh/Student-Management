@@ -9,7 +9,13 @@ interface IMembersTable {
   handleDelete: (id: number) => void;
   handleEdit: (id: number) => void;
 }
-
+/**
+ * Renders a table displaying student members with edit and delete actions.
+ *
+ * @component
+ * @param {IMembersTable} props - Component props
+ * @returns {JSX.Element} The rendered MembersTable component
+ */
 export const MembersTable = ({ members, handleDelete, handleEdit }: IMembersTable) => (
   <div className="table-wrapper">
     <Table striped bordered hover className="table-content">

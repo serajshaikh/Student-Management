@@ -9,6 +9,12 @@ import { SearchBar } from "./utils/SearchBar";
 import { MembersTable } from "./utils/MembersTable";
 import StudentForm from "./StudentForm";
 
+/**
+ * MembersList component displays a list of students with search, pagination, add, edit, and delete functionality.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered MembersList component.
+ */
 const MembersList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

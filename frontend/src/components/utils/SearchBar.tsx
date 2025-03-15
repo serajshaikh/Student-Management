@@ -5,6 +5,13 @@ interface ISearchBar {
   setSearchTerm: (value: string) => void;
   setCurrentPage: (page: number) => void;
 }
+/**
+ * SearchBar component for filtering by name or email.
+ *
+ * @component
+ * @param {ISearchBar} props - Component props
+ * @returns {JSX.Element} The rendered SearchBar component
+ */
 export const SearchBar = ({ searchTerm, setSearchTerm, setCurrentPage }:ISearchBar ) => (
   <InputGroup className="flex-grow-1" style={{ maxWidth: "300px" }}>
     <FormControl
