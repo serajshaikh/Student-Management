@@ -3,10 +3,10 @@
 psql -U postgres
 --password: ******** 
 
-
 -- Create database
 CREATE DATABASE student_management;
-\c student_management; -- Connect to the database
+-- Connect to the database
+\c student_management; 
 
 -- Create Students Table
 CREATE TABLE students (
