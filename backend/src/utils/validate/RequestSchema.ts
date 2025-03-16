@@ -6,7 +6,11 @@ export const ReqSchema = z.object({
     .email({ message: "Invalid email address" })
     .min(1, { message: "'email' field is required" }),
 
-  name: z.string().min(2, { message: "Invalid name" }),
+    name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long" })
+    .max(50, { message: "Name must be at most 50 characters long" })
+    .regex(/^[A-Za-z\s]+$/, { message: "Name must contain only letters and spaces" }),
 
   date_of_birth: z
     .string()

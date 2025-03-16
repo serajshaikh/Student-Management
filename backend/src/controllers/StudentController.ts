@@ -10,6 +10,7 @@ import { ServiceException } from '../utils/error/ServiceException';
 import { ReqData, ReqSchema } from '../utils/validate/RequestSchema';
 import { CommonUtils } from '../utils/CommonUtils';
 import { ILogger } from '../interfaces/ILogger';
+import { getAllStudentsSchema, IGetAllStudentsSchema } from '../utils/validate/getAllStudentsSchema';
 
 @controller('/api/students')
 export class StudentController implements IStudentController {
@@ -28,10 +29,10 @@ export class StudentController implements IStudentController {
       if (!isConnected) {
         throw new ServiceException({ message: "Database connection failed", trace_id, statusCode: 500 });
       }
-      this.responseHandler.success({ responseData: { message: "Database connection successful" }, statusCode: 200, response: res });
+      this.responseHandler.success({ responseData: { message: "Database connection successful" }, statusCode: 200, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error testing database connection", trace_id, ref: "StudentController:testDatabaseConnection" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
   /**
@@ -48,9 +49,7 @@ export class StudentController implements IStudentController {
     try {
       this.logger.info({}, { description: "Fetching students", trace_id, ref: "StudentController:getAllStudents" });
 
-      if (pageNumber < 1 || limitNumber < 1) {
-        throw new ServiceException({ message: "Page and limit must be positive integers", trace_id, statusCode: 404 });
-      }
+      this.responseHandler.validate<IGetAllStudentsSchema>({ schema: getAllStudentsSchema , payload:{ page, limit, search } }, trace_id);
 
       const { students, totalCount } = await this.studentService.getAllStudents(pageNumber, limitNumber, search, trace_id);
       const totalPages = Math.ceil(totalCount / limitNumber);
@@ -70,7 +69,7 @@ export class StudentController implements IStudentController {
       this.responseHandler.success({ responseData: response, statusCode: 200, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error fetching students", trace_id, ref: "StudentController:getAllStudents" });
-      this.responseHandler.failure({ response: res, error });
+      this.responseHandler.failure({ response: res, error }, trace_id);
     }
   }
 
@@ -213,7 +212,6 @@ export class StudentController implements IStudentController {
     try {
       await this.studentService.deleteStudent(id, trace_id);
       this.logger.info({ id }, { description: "Student deleted successfully", trace_id, ref: "StudentController:deleteStudent" });
-
       this.responseHandler.success({ responseData: {message:"Student Deleted Successfully", trace_id}, statusCode: 204, response: res }, trace_id);
     } catch (error) {
       this.logger.error(error, { description: "Error deleting student", trace_id, ref: "StudentController:deleteStudent" });

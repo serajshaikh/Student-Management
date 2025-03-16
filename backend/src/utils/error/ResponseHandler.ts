@@ -29,9 +29,9 @@ export class ResponseHandler implements IResponseHandler {
     failure(arg: IResponseModelFailureParams, trace_id?: string): void {
         console.log("Failure---->", JSON.stringify(arg.error), trace_id ?? "No Trace ID");
         this.logger.info({}, { description: "Request Failed---->", trace_id, ref: "ResponseHandler:IResponseHandler" });
-
         const { error, statusCode, response } = arg;
         const sanitizedError = _.omit(error ?? {}, ["statusCode"]);
+        (sanitizedError as any).trace_id = trace_id;
         const status = (error as IServiceExceptionOptions)?.statusCode ?? statusCode ?? 500;
         response.status(status).json({ error: _.isEmpty(sanitizedError) ? { message: "Internal Server Error" } : sanitizedError });
     }

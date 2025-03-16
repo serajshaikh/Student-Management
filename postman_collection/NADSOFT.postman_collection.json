@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "b6244701-b484-4ff5-b240-af785349004f",
+		"name": "NADSOFT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38967991"
+	},
+	"item": [
+		{
+			"name": "Test Database Connection",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/students/test-db",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students",
+						"test-db"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Student",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"John Doe1\",\r\n  \"email\": \"adsf.doe50@example.com\",\r\n  \"date_of_birth\": \"2000-01-01\",\r\n  \"academic_details\":[\r\n    {\r\n        \"subject\":\"Computer Science\",\r\n        \"mark\":80\r\n    },\r\n    {\r\n        \"subject\":\"Data Communication\",\r\n        \"mark\":50\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:5000/api/students \\\r\n-H \"Content-Type: application/json\" \\\r\n-d '{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"john.doe@example.com\",\r\n  \"date_of_birth\": \"2000-01-01\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/students?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:5000/api/students"
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Student",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Min Updated\",\r\n    \"email\": \"Min.updated@example.com\",\r\n    \"date_of_birth\": \"2000-12-01\",\r\n    // 1. To leave the academic_details unchanged, remove the academic_details key from the payload.\r\n    // 2. To clear all existing academic_details, pass an empty array as the value for academic_details.\r\n    // 3. To replace existing academic_details, provide the new academic_details array. This will\r\n    //    remove any existing records in the marks table and add the new records.\r\n    \"academic_details\": [\r\n        {\r\n            \"subject\": \"Computer Science\",\r\n            \"mark\": 80\r\n        },\r\n        {\r\n            \"subject\": \"Data Communication\",\r\n            \"mark\": 50\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/students/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students",
+						"2"
+					]
+				},
+				"description": "Generated from cURL: curl -X PUT http://localhost:5000/api/students/1 \\\r\n-H \"Content-Type: application/json\" \\\r\n-d '{\r\n  \"name\": \"John Updated\",\r\n  \"email\": \"john.updated@example.com\",\r\n  \"date_of_birth\": \"2000-01-01\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Get a Student by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/students/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students",
+						"3"
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:5000/api/students/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Student",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/students/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students",
+						"3"
+					]
+				},
+				"description": "Generated from cURL: curl -X DELETE http://localhost:5000/api/students/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Bulk",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"name\": \"John Doe\",\r\n        \"email\": \"john.doe@example.com\",\r\n        \"date_of_birth\": \"1998-02-10\"\r\n    },\r\n    {\r\n        \"name\": \"Emma Watson\",\r\n        \"email\": \"emma.watson@example.com\",\r\n        \"date_of_birth\": \"1997-09-21\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Michael Johnson\",\r\n        \"email\": \"michael.j@example.com\",\r\n        \"date_of_birth\": \"2001-06-11\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Physics\",\r\n                \"mark\": 88\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Sophia Brown\",\r\n        \"email\": \"sophia.b@example.com\",\r\n        \"date_of_birth\": \"1996-12-05\"\r\n    },\r\n    {\r\n        \"name\": \"Liam Carter\",\r\n        \"email\": \"liam.c@example.com\",\r\n        \"date_of_birth\": \"1999-07-23\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Math\",\r\n                \"mark\": 92\r\n            },\r\n            {\r\n                \"subject\": \"Science\",\r\n                \"mark\": 85\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Olivia Miller\",\r\n        \"email\": \"olivia.m@example.com\",\r\n        \"date_of_birth\": \"1995-04-30\"\r\n    },\r\n    {\r\n        \"name\": \"Noah Wilson\",\r\n        \"email\": \"noah.w@example.com\",\r\n        \"date_of_birth\": \"1998-11-22\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"History\",\r\n                \"mark\": 78\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Ava Thomas\",\r\n        \"email\": \"ava.t@example.com\",\r\n        \"date_of_birth\": \"2000-03-15\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Ethan Garcia\",\r\n        \"email\": \"ethan.g@example.com\",\r\n        \"date_of_birth\": \"2001-08-19\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"English\",\r\n                \"mark\": 82\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Mia Anderson\",\r\n        \"email\": \"mia.a@example.com\",\r\n        \"date_of_birth\": \"1997-01-08\"\r\n    },\r\n    {\r\n        \"name\": \"James White\",\r\n        \"email\": \"james.w@example.com\",\r\n        \"date_of_birth\": \"1999-05-27\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Biology\",\r\n                \"mark\": 89\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Charlotte Martinez\",\r\n        \"email\": \"charlotte.m@example.com\",\r\n        \"date_of_birth\": \"2000-10-04\"\r\n    },\r\n    {\r\n        \"name\": \"Benjamin Clark\",\r\n        \"email\": \"benjamin.c@example.com\",\r\n        \"date_of_birth\": \"1996-09-14\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Math\",\r\n                \"mark\": 95\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Amelia Lewis\",\r\n        \"email\": \"amelia.l@example.com\",\r\n        \"date_of_birth\": \"1998-06-20\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Lucas Walker\",\r\n        \"email\": \"lucas.w@example.com\",\r\n        \"date_of_birth\": \"2002-12-12\"\r\n    },\r\n    {\r\n        \"name\": \"Isabella Hall\",\r\n        \"email\": \"isabella.h@example.com\",\r\n        \"date_of_birth\": \"1997-08-29\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"History\",\r\n                \"mark\": 74\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Henry Allen\",\r\n        \"email\": \"henry.a@example.com\",\r\n        \"date_of_birth\": \"2001-04-17\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Emily Young\",\r\n        \"email\": \"emily.y@example.com\",\r\n        \"date_of_birth\": \"1995-07-03\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Science\",\r\n                \"mark\": 91\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Daniel King\",\r\n        \"email\": \"daniel.k@example.com\",\r\n        \"date_of_birth\": \"1999-02-25\"\r\n    },\r\n    {\r\n        \"name\": \"Harper Scott\",\r\n        \"email\": \"harper.s@example.com\",\r\n        \"date_of_birth\": \"2003-06-05\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Geography\",\r\n                \"mark\": 83\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Alexander Green\",\r\n        \"email\": \"alexander.g@example.com\",\r\n        \"date_of_birth\": \"1998-11-13\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Ella Adams\",\r\n        \"email\": \"ella.a@example.com\",\r\n        \"date_of_birth\": \"1997-10-01\"\r\n    },\r\n    {\r\n        \"name\": \"William Baker\",\r\n        \"email\": \"william.b@example.com\",\r\n        \"date_of_birth\": \"2000-07-09\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Math\",\r\n                \"mark\": 88\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Grace Nelson\",\r\n        \"email\": \"grace.n@example.com\",\r\n        \"date_of_birth\": \"1996-05-22\"\r\n    },\r\n    {\r\n        \"name\": \"Matthew Carter\",\r\n        \"email\": \"matthew.c@example.com\",\r\n        \"date_of_birth\": \"2002-09-14\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Physics\",\r\n                \"mark\": 84\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Sofia Collins\",\r\n        \"email\": \"sofia.c@example.com\",\r\n        \"date_of_birth\": \"1999-03-28\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"David Rivera\",\r\n        \"email\": \"david.r@example.com\",\r\n        \"date_of_birth\": \"2001-11-30\"\r\n    },\r\n    {\r\n        \"name\": \"Chloe Roberts\",\r\n        \"email\": \"chloe.r@example.com\",\r\n        \"date_of_birth\": \"1995-12-25\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"English\",\r\n                \"mark\": 79\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Joseph Wood\",\r\n        \"email\": \"joseph.w@example.com\",\r\n        \"date_of_birth\": \"1997-06-16\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Lily Bell\",\r\n        \"email\": \"lily.b@example.com\",\r\n        \"date_of_birth\": \"2003-02-19\"\r\n    },\r\n    {\r\n        \"name\": \"Samuel Murphy\",\r\n        \"email\": \"samuel.m@example.com\",\r\n        \"date_of_birth\": \"1998-04-07\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Biology\",\r\n                \"mark\": 85\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Zoe Sanders\",\r\n        \"email\": \"zoe.s@example.com\",\r\n        \"date_of_birth\": \"2000-09-05\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Andrew Flores\",\r\n        \"email\": \"andrew.f@example.com\",\r\n        \"date_of_birth\": \"1999-01-22\"\r\n    },\r\n    {\r\n        \"name\": \"Scarlett Perez\",\r\n        \"email\": \"scarlett.p@example.com\",\r\n        \"date_of_birth\": \"2001-07-11\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"History\",\r\n                \"mark\": 77\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Christopher Price\",\r\n        \"email\": \"chris.p@example.com\",\r\n        \"date_of_birth\": \"1996-11-04\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Madison Turner\",\r\n        \"email\": \"madison.t@example.com\",\r\n        \"date_of_birth\": \"2002-08-17\"\r\n    },\r\n    {\r\n        \"name\": \"Joshua Brooks\",\r\n        \"email\": \"joshua.b@example.com\",\r\n        \"date_of_birth\": \"1997-12-08\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Math\",\r\n                \"mark\": 91\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Aubrey Reed\",\r\n        \"email\": \"aubrey.r@example.com\",\r\n        \"date_of_birth\": \"1995-10-20\"\r\n    },\r\n    {\r\n        \"name\": \"Evelyn Stewart\",\r\n        \"email\": \"evelyn.s@example.com\",\r\n        \"date_of_birth\": \"1998-05-31\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Science\",\r\n                \"mark\": 80\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Jack Morris\",\r\n        \"email\": \"jack.m@example.com\",\r\n        \"date_of_birth\": \"2000-03-14\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Layla Rogers\",\r\n        \"email\": \"layla.r@example.com\",\r\n        \"date_of_birth\": \"2003-07-22\"\r\n    },\r\n    {\r\n        \"name\": \"Owen Cook\",\r\n        \"email\": \"owen.c@example.com\",\r\n        \"date_of_birth\": \"1996-01-27\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"English\",\r\n                \"mark\": 82\r\n            }\r\n        ]\r\n    },\r\n    {\r\n        \"name\": \"Hannah Foster\",\r\n        \"email\": \"hannah.f@example.com\",\r\n        \"date_of_birth\": \"1999-06-09\",\r\n        \"academic_details\": []\r\n    },\r\n    {\r\n        \"name\": \"Mason Gonzales\",\r\n        \"email\": \"mason.g@example.com\",\r\n        \"date_of_birth\": \"2001-02-18\"\r\n    },\r\n    {\r\n        \"name\": \"Victoria Bryant\",\r\n        \"email\": \"victoria.b@example.com\",\r\n        \"date_of_birth\": \"1997-09-26\",\r\n        \"academic_details\": [\r\n            {\r\n                \"subject\": \"Geography\",\r\n                \"mark\": 76\r\n            }\r\n        ]\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/students/bulk-records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"students",
+						"bulk-records"
+					]
+				},
+				"description": "Generated from cURL: curl --location 'http://localhost:5000/api/students/bulk-records' \\\r\n--header 'Content-Type: application/json' \\\r\n--data-raw '[\r\n  {\r\n    \"name\": \"John Doe\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"date_of_birth\": \"2000-01-01\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe\",\r\n    \"email\": \"jane.doe@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe 1\",\r\n    \"email\": \"jane.doe1@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe2\",\r\n    \"email\": \"jane.doe2@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe3\",\r\n    \"email\": \"jane.doe3@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe4\",\r\n    \"email\": \"jane.doe4@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe5\",\r\n    \"email\": \"jane.doe5@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe6\",\r\n    \"email\": \"jane.doe6@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane Doe7\",\r\n    \"email\": \"jane.doe7@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane 7Doe\",\r\n    \"email\": \"jane.doe8@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane 8Doe\",\r\n    \"email\": \"jane.do8e@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  },\r\n  {\r\n    \"name\": \"Jane D8e\",\r\n    \"email\": \"jane.do0e8@example.com\",\r\n    \"date_of_birth\": \"1998-05-20\"\r\n  }\r\n]\r\n'"
+			},
+			"response": []
+		}
+	]
+}
